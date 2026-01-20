@@ -1,6 +1,7 @@
 package model;
 
 public class Piece {
+
     private String color;
 
     // Constructor
