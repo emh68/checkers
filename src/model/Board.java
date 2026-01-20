@@ -88,29 +88,66 @@ public class Board {
         if (board[endRow][endCol] != null) {
             return null;
         }
-        // Only allow a 1-step diagonal move
-        if (Math.abs(endRow - startRow) != 1 || Math.abs(endCol - startCol) != 1) {
+
+        int rowDistance = Math.abs(endRow - startRow);
+        int colDistance = Math.abs(endCol - startCol);
+        // Normal move one space diagonally
+        if (rowDistance == 1 && colDistance == 1) {
+            // Ensures pieces move in the correct direction based on color
+            if (pieceToMove.getColor().equals("red")) {
+                if ((endRow - startRow) != 1) {
+                    return null;
+                }
+            } else if (pieceToMove.getColor().equals("black")) {
+                if ((endRow - startRow) != -1) {
+                    return null;
+                }
+            }
+            // Place the piece at the destination
+            board[endRow][endCol] = pieceToMove;
+            // Clear the source square
+            board[startRow][startCol] = null;
+            return pieceToMove;
+            // Capture move    
+        } else if (rowDistance == 2 && colDistance == 2) {
+            // Get calculate and get capture piece coordinates
+            int jumpedRow = (startRow + endRow) / 2;
+            int jumpedCol = (startCol + endCol) / 2;
+            Piece jumpedPiece = board[jumpedRow][jumpedCol];
+            // If no piece to jump, cannot capture
+            if (jumpedPiece == null) {
+                return null;
+                // If there is a piece in the middle, check its color
+            } else {
+                String movingColor = pieceToMove.getColor();
+                String jumpedColor = jumpedPiece.getColor();
+                // If piece to move and jumped piece are the same color, no capture
+                if (movingColor.equals(jumpedColor)) {
+                    return null;
+                }
+                // Ensures pieces move in the correct direction based on color
+                if (pieceToMove.getColor().equals("red")) {
+                    if ((endRow - startRow) != 2) {
+                        return null;
+                    }
+                } else if (pieceToMove.getColor().equals("black")) {
+                    if ((endRow - startRow) != -2) {
+                        return null;
+                    }
+                }
+                // If piece to move and jumped piece are not same color, capture opponent piece clear start piece and jump piece and move to new destination
+                board[endRow][endCol] = pieceToMove;
+                board[jumpedRow][jumpedCol] = null;
+                board[startRow][startCol] = null;
+                return pieceToMove;
+            }
+        } else {
             return null;
         }
-        // Ensures pieces move in the correct direction based on color
-        if (pieceToMove.getColor().equals("red")) {
-            if ((endRow - startRow) != 1) {
-                return null;
-            }
-        } else if (pieceToMove.getColor().equals("black")) {
-            if ((endRow - startRow) != -1) {
-                return null;
-            }
-        }
 
-        // Place the piece at the destination
-        board[endRow][endCol] = pieceToMove;
-        // Clear the source square
-        board[startRow][startCol] = null;
-        return pieceToMove;
     }
 
-    // public Piece removePieceAt(int row, int col)
-    // {
-    // }
+// public Piece removePieceAt(int row, int col)
+// {
+// }
 }
