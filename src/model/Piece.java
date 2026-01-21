@@ -3,6 +3,7 @@ package model;
 public class Piece {
 
     private String color;
+    private boolean isKing = false;
 
     // Constructor
     public Piece(String color) {
@@ -12,5 +13,13 @@ public class Piece {
     // Getter
     public String getColor() {
         return color;
+    }
+
+    public boolean isKing() {
+        return isKing;
+    }
+
+    public void setKing(boolean king) {
+        isKing = king;
     }
 }
