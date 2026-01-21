@@ -2,17 +2,6 @@
 The board owns piece positions. Board initializes starting positions.
 Empty squares are represented by empty = no piece present. 
 The board is not responsible for player turnor win detection */
-
- /* Board size: fixed 8×8
-Internal storage: 2D structure
-Access rules:
-Safe read
-Controlled write */
- /* Return what piece is at a location
-Place or remove a piece
-Apply a move
-Validate bounds 
- */
 package model;
 
 public class Board {
@@ -71,6 +60,78 @@ public class Board {
         return board[row][col];
     }
 
+    private boolean isOnBoard(int row, int col) {
+        return row >= 0 && row <= 7 && col >= 0 && col <= 7;
+    }
+
+    public boolean canCapture(int row, int col) {
+        Piece pieceToMove = getPieceAt(row, col);
+        if (pieceToMove == null) {
+            return false;
+        }
+        String movingColor = pieceToMove.getColor();
+        // Movement down (Red 'man' pieces)
+        int adjRowDown = row + 1;
+        int landRowDown = row + 2;
+
+        // Movement up (Black 'man' pieces)
+        int adjRowUp = row - 1;
+        int landRowUp = row - 2;
+
+        // RED PIECES: Only check downward directions (Directions 1 & 2)
+        if (movingColor.equals("red")) {
+            // Direction 1: Down-Right (column increases)
+            int adjColDr = col + 1;
+            int landColDr = col + 2;
+            if (isOnBoard(landRowDown, landColDr) && isOnBoard(adjRowDown, adjColDr)) {
+                Piece adjacentPiece = getPieceAt(adjRowDown, adjColDr);
+                Piece landingSpace = getPieceAt(landRowDown, landColDr);
+
+                if (adjacentPiece != null && !adjacentPiece.getColor().equals(movingColor) && landingSpace == null) {
+                    return true;
+                }
+            }
+
+            // Direction 2: Down-Left (column decreases)
+            int adjColDl = col - 1;
+            int landColDl = col - 2;
+            if (isOnBoard(landRowDown, landColDl) && isOnBoard(adjRowDown, adjColDl)) {
+                Piece adjacentPiece = getPieceAt(adjRowDown, adjColDl);
+                Piece landingSpace = getPieceAt(landRowDown, landColDl);
+
+                if (adjacentPiece != null && !adjacentPiece.getColor().equals(movingColor) && landingSpace == null) {
+                    return true;
+                }
+            }
+        }
+        // BLACK PIECES: Only check upward directions (Directions 3 & 4)
+        if (movingColor.equals("black")) {
+            // Direction 3: Up-Right (column increases)
+            int adjColUr = col + 1;
+            int landColUr = col + 2;
+            if (isOnBoard(landRowUp, landColUr) && isOnBoard(adjRowUp, adjColUr)) {
+                Piece adjacentPiece = getPieceAt(adjRowUp, adjColUr);
+                Piece landingSpace = getPieceAt(landRowUp, landColUr);
+
+                if (adjacentPiece != null && !adjacentPiece.getColor().equals(movingColor) && landingSpace == null) {
+                    return true;
+                }
+            }
+            // Direction 4: Up-Left (column decreases)
+            int adjColUl = col - 1;
+            int landColUl = col - 2;
+            if (isOnBoard(landRowUp, landColUl) && isOnBoard(adjRowUp, adjColUl)) {
+                Piece adjacentPiece = getPieceAt(adjRowUp, adjColUl);
+                Piece landingSpace = getPieceAt(landRowUp, landColUl);
+
+                if (adjacentPiece != null && !adjacentPiece.getColor().equals(movingColor) && landingSpace == null) {
+                    return true;
+                }
+            }
+        }
+        return false; // If no valid captures found for specific color
+    }
+
     public Piece movePiece(int startRow, int startCol, int endRow, int endCol) {
         // Rejects moves with coordinates outside 0-7 (the board)
         if (startRow < 0 || startRow > 7
@@ -117,8 +178,8 @@ public class Board {
             // If no piece to jump, cannot capture
             if (jumpedPiece == null) {
                 return null;
-                // If there is a piece in the middle, check its color
-            } else {
+            }// If there is a piece in the middle, check its color
+            else {
                 String movingColor = pieceToMove.getColor();
                 String jumpedColor = jumpedPiece.getColor();
                 // If piece to move and jumped piece are the same color, no capture
@@ -126,11 +187,11 @@ public class Board {
                     return null;
                 }
                 // Ensures pieces move in the correct direction based on color
-                if (pieceToMove.getColor().equals("red")) {
+                if (movingColor.equals("red")) {
                     if ((endRow - startRow) != 2) {
                         return null;
                     }
-                } else if (pieceToMove.getColor().equals("black")) {
+                } else if (movingColor.equals("black")) {
                     if ((endRow - startRow) != -2) {
                         return null;
                     }
