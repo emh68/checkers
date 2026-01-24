@@ -1,49 +1,88 @@
 
+import java.util.Scanner;
 import model.Board;
-import model.Piece;
+import model.Game;
 
 public class Main {
 
     public static void main(String[] args) {
-        Board myBoard = new Board();
-        myBoard.initializePieces();
-        myBoard.printBoard();
-        System.out.println();
-        myBoard.movePiece(5, 2, 4, 3);
+        // Reads player input from console
+        Scanner scanner = new Scanner(System.in);
 
-        // 2. Test Capture Move
-        System.out.println("\n--- Testing Capture Move ---");
-        // Clear board or just use a fresh one
-        Board captureBoard = new Board();
+        boolean playAgain = true;
 
-        // Place a Black piece and a Red piece in a capture position
-        Piece black = new Piece("black");
-        Piece red = new Piece("red");
+        while (playAgain) {
+            // Start a new game only if the players choose to play again
+            Game game = new Game();
 
-        captureBoard.placePiece(5, 2, black);
-        captureBoard.placePiece(4, 3, red); // Red is diagonal to black
+            while (true) {
+                // Always displays the current game state before asking for the next move
+                Board board = game.getBoard();
+                System.out.println("\nTurn: " + game.getCurrentTurn());
+                board.printBoard();
 
-        System.out.println("Before Capture:");
-        captureBoard.printBoard();
+                // If there is a winner, declare winner and end the current game
+                if (game.getWinner() != null) {
+                    System.out.println("\nWinner: " + game.getWinner());
+                    break;
+                }
 
-        // Black jumps over Red (5,2) -> (3,4)
-        Piece result = captureBoard.movePiece(5, 2, 3, 4);
+                // Input format is 4 integers: startRow, startCol, endRow, endCol
+                // Example: "5 0 4 1"
+                System.out.println("Enter move as: startRow startCol endRow endCol (or 'q' to quit)");
+                String line = scanner.nextLine().trim();
 
-        if (result != null) {
-            System.out.println("\nCapture Successful!");
-        } else {
-            System.out.println("\nCapture Failed!");
+                // Quit game if letter 'q' is typed (exits the entire program)
+                if (line.equalsIgnoreCase("q")) {
+                    playAgain = false;
+                    break;
+                }
+
+                // Split input so extra spaces is not invalid
+                String[] parts = line.split("\\s+");
+
+                // Ensure player enters exactly 4 integers, if not provide feedback
+                if (parts.length != 4) {
+                    System.out.println("Invalid input format.");
+                    continue;
+                }
+
+                // Convert each part entered into an integer
+                int startRow, startCol, endRow, endCol;
+                try {
+                    startRow = Integer.parseInt(parts[0]);
+                    startCol = Integer.parseInt(parts[1]);
+                    endRow = Integer.parseInt(parts[2]);
+                    endCol = Integer.parseInt(parts[3]);
+                } catch (NumberFormatException e) {
+                    // If non-numeric input provide feedback to player
+                    System.out.println("Please enter 4 integers.");
+                    continue;
+                }
+
+                // If move is illegal (i.e. invalid move, forced capture ignored, etc.) provide feedback to player
+                boolean ok = game.executePlayerMove(startRow, startCol, endRow, endCol);
+                if (!ok) {
+                    System.out.println("Invalid move. Try again.");
+                }
+            }
+
+            // If the user quit with 'q', do not ask to play again
+            if (!playAgain) {
+                break;
+            }
+
+            // Ask players if they want to play again after a winner is declared
+            System.out.print("\nPlay again? (y/n): ");
+            String answer = scanner.nextLine().trim();
+
+            if (!answer.equalsIgnoreCase("y")) {
+                playAgain = false;
+            }
         }
 
-        captureBoard.printBoard();
-
-        // if (result == null) {
-        //     System.out.println("Move failed");
-        // } else {
-        //     System.out.println("Move succeeded");
-        // }
-        // System.out.println();
-        // myBoard.printBoard();
-        // System.out.println("Hello");
+        // Clean up resources before exiting.
+        scanner.close();
+        System.out.println("Game ended.");
     }
 }
