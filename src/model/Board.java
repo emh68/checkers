@@ -1,7 +1,7 @@
 /* Board is 8x8 and is responsible for keeping track of piece position. 
 The board owns piece positions. Board initializes starting positions.
-Empty squares are represented by empty = no piece present. 
-The board is not responsible for player turnor win detection */
+Empty squares are represented by empty = null. 
+The board is not responsible for player turn or win detection */
 package model;
 
 public class Board {

@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run CheckersApp (JavaFX)",
+      "request": "launch",
+      "mainClass": "ui.CheckersApp",
+      "cwd": "${workspaceFolder}",
+      "vmArgs": "--module-path \"C:\\javafx\\javafx-sdk-25.0.2\\lib\" --add-modules javafx.controls --enable-native-access=javafx.graphics"
+    },
+    {
+      "type": "java",
+      "name": "Run Main (Console)",
+      "request": "launch",
+      "mainClass": "Main",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
