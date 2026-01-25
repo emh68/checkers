@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class Game {
 
-    private Board board;
+    private final Board board;
     private String currentTurn;
     private Piece multiJumpPiece; // Tracks if a piece MUST jump again
     private String winner;
 
     // Stores history of successful moves
-    private ArrayList<String> moveHistory;
+    private final ArrayList<String> moveHistory;
 
     public Game() {
         board = new Board();

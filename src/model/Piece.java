@@ -3,7 +3,7 @@ package model;
 public class Piece {
 
     // "red" or "black"
-    private String color;
+    private final String color;
 
     // Indicates whether this piece has been promoted to a king
     private boolean isKing = false;
