@@ -6,7 +6,7 @@ The software includes a complete checkers engine that runs as a console-based MV
 
 The purpose of this project was to strengthen my understanding of Java through object-oriented design, clear class responsibilities, and state management. I also wanted experience integrating a JavaFX graphical user interface.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/nuETDkw3IN0)
 
 # Development Environment
 
