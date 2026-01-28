@@ -39,3 +39,10 @@ The purpose of this project was to strengthen my understanding of Java through o
 - Add an optional AI opponent
 - Add save/load functionality for game state
 - Resolve remaining JavaFX classpath and IDE diagnostic issues
+
+# AI Disclosure 
+I used ChatGPT as a learning and reference tool to help reason through the gameplay logic, not to generate code. For example, I asked questions about how to track pieces and moves on the board to better understand the board structure from a "board-centric" perspective versus a "player-centric" perspective, since there are technically no real pieces in computer memory. It confirmed that using a board structure where empty spaces are represented as null is a clean and common approach.
+
+I also used it to check movement logic. I asked whether moving to the right for black pieces should increase the column value and whether the same idea applies to red pieces when capturing. It confirmed the logic but also suggested a clearer way to think about movement: from the perspective of the board rather than the player. In that model, moving right always increases the column index and moving left always decreases it, regardless of piece color.
+
+ChatGPT did not write or generate my code. I used it strictly to talk through logic and confirm that my understanding and approach made sense before implementing all the logic myself.
